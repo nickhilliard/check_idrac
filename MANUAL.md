@@ -16,6 +16,11 @@ AWS Cloud Ops at ADURO, INC
 is /usr/share/snmp/mibs/. If you don't want to do this, keep it where you want and use option -m/--mib with absolute path to
 it.
 
+To install on Debian / Ubuntu:
+```
+# apt install snmp-mibs-downloader
+```
+
 ## Supported hardware type:
 - Power Supply
 - Power Unit
