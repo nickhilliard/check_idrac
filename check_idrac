@@ -174,6 +174,7 @@ def cli_reader():
     optp.add_option('-n', '--no-alert', help='always return with exit code 0', action='store_true', dest='no_alert')
     optp.add_option('-w', help='hardware to check. If no hardware specified, all will be listed: DISK, VDISK, FAN, SENSOR, CPU, PS, PU, MEM, BATTERY', dest='hardware', metavar='FAN|FAN#1|MEM')
     optp.add_option('-p', help='enable performance data', dest='perf', action='store_true')
+    optp.add_option('-i', help='only display WARN and CRIT, else OK', dest='icinga', action='store_true')
     optp.add_option('-d', help='output debug info. Don\'t use when called by nagios.', dest='debug', action='store_true')
     optp.add_option('--fan-warn', help='FAN rpm warning thresholds', dest='fan_warn', metavar='MIN,MAX')
     optp.add_option('--fan-crit', help='FAN rpm critical thresholds', dest='fan_crit', metavar='MIN,MAX')
@@ -215,6 +216,8 @@ def cli_reader():
         if opts.crit: conf['state_crit'] = opts.crit
         if opts.no_alert is True: conf['alert'] = False
         if opts.perf is True: conf['perf'] = True
+        if opts.icinga is True: conf['icinga'] = True
+        else: conf['icinga'] = False
         if opts.debug is True: conf['debug'] = True
         if opts.mem_modules: conf['mem_modules'] = opts.mem_modules
         # parse fan threshold
@@ -881,9 +884,16 @@ if __name__ == '__main__':
             elif tmp_code[0] == 1:
                 if exit_code != 2:
                     exit_code = tmp_code[0]
-            print('%s' % key)
-            sys.stdout.write('--')
-            print('\n--'.join(result))
+            if conf['icinga'] is True:
+                for line in result:
+                    if "CRITICAL" in line or "(!)" in line:
+                        print(line)
+            else:
+                print('%s' % key)
+                sys.stdout.write('--')
+                print('\n--'.join(result))
+        if conf['icinga'] is True and exit_code == 0:
+            print("OK")
         sys.exit(exit_code)
     else:
         not_found = 0
