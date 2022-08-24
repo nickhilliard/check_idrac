@@ -259,7 +259,7 @@ def config_reader():
         except IOError as err_read_file:
             print(err_read_file)
         else:
-            for key in conf_file.keys():
+            for key in list(conf_file.keys()):
                 try:
                     conf_file[key] = reader.get(key.split('_')[0], key.split('_',1)[1])
                 except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
@@ -456,7 +456,7 @@ class PARSER:
                 2: [2, 'CRIT'],
                 3: [3, 'UNKNOWN']}
         alert = 0
-        for key in tmp.keys():
+        for key in list(tmp.keys()):
             for stat in value_on_alert:  # check status of hw
                 if tmp[key][int(stat)] == '(n/a)':
                     continue
@@ -668,7 +668,7 @@ class PARSER:
             if self.alert is True:
                 hw_dict, exit_code = self.raise_alert(hw_dict, value_on_alert)
             tmp = '%s %s (%s) %s GB: %s, PowerStat: %s, HotSpare: %s [%s, %s, S/N: %s] isFailing: %s'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -683,7 +683,7 @@ class PARSER:
             if self.alert is True:
                 hw_dict, exit_code = self.raise_alert(hw_dict, value_on_alert)
             tmp = '%s: %s RPM - %s/%s%s'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -700,7 +700,7 @@ class PARSER:
                 tmp = '%s: %s C %s/%s%s'
             else:
                 tmp = '%s: %s C %s/%s%s'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -722,7 +722,7 @@ class PARSER:
             if self.alert is True:
                 hw_dict, exit_code = self.raise_alert(hw_dict, value_on_alert)
             tmp = '%s %s (%s cores/%s threads): %s/%s [%s]'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -733,7 +733,7 @@ class PARSER:
             if self.alert is True:
                 hw_dict, exit_code = self.raise_alert(hw_dict, value_on_alert)
             tmp = '%s %s: %s/%s, RedundancyStatus: %s, SystemBoard Pwr Consumption: %s W%s'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 if len(hw) < 5:  # just in case no pwr consumption found
                     hw.append('(N/A)')
                 for v in value_on_alert:
@@ -752,7 +752,7 @@ class PARSER:
                 tmp = '%s %s: %s, Volt I/O: %s V/%s V, Current: %s A, Watt I/O: %s W/%s W%s'
             else:
                 tmp = '%s %s: %s, Volt I/O: %s V/%s V, Current: %s A, Watt I/O: %s W/%s W'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -800,7 +800,7 @@ class PARSER:
                 hw_dict, exit_code = self.raise_alert(hw_dict, value_on_alert)
             if self.debug: print(hw_dict)
             tmp = '%s %s (%s) %s GB/%s MHz: %s/%s [%s, %s, S/N: %s]'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -829,7 +829,7 @@ class PARSER:
             if self.alert is True:
                 hw_dict, exit_code = self.raise_alert(hw_dict, value_on_alert)
             tmp = '%s: %s/%s [%s]'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -840,7 +840,7 @@ class PARSER:
             if self.alert is True:
                 hw_dict, exit_code = self.raise_alert(hw_dict, value_on_alert)
             tmp = '%s %s'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -850,7 +850,7 @@ class PARSER:
             if self.alert is True:
                 hw_dict, exit_code = self.raise_alert(hw_dict, value_on_alert)
             tmp = '%s %s (%s): %s/%s, %s (%s GB), BadBlock: %s [%s]'
-            for hw in hw_dict.values():
+            for hw in list(hw_dict.values()):
                 for v in value_on_alert:
                     v = int(v)
                     hw[v] = hw[v].upper()
@@ -865,14 +865,14 @@ class PARSER:
 if __name__ == '__main__':
     cli_reader()
     if conf['file'] is not None:
-        for key in conf.keys():  # trigger config_reader if there is None configuration
+        for key in list(conf.keys()):  # trigger config_reader if there is None configuration
             if conf[key] is None:
                 config_reader()
                 break
     config_verify()
     if conf['hardware'] is None:  # check all hardware
         exit_code = 0
-        for key in all_hardware.keys():
+        for key in list(all_hardware.keys()):
             conf['hardware'] = [key, None]
             hw_info = all_hardware[key]
             result, tmp_code = PARSER().main()
@@ -887,7 +887,7 @@ if __name__ == '__main__':
         sys.exit(exit_code)
     else:
         not_found = 0
-        for key in all_hardware.keys():
+        for key in list(all_hardware.keys()):
             if conf['hardware'][0] != key:
                 not_found += 1
             if not_found == len(all_hardware.keys()):
