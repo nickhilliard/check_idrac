@@ -586,7 +586,10 @@ class PARSER:
                                 tmp[key][stat_t] += '(!)'
                                 if alert != 2: alert = 1
                     elif self.hardware[2] == 'Sensor':
-                        tmp[key][stat_t] = float(tmp[key][stat_t].strip('(!)'))/10
+                        try:
+                            tmp[key][stat_t] = float(tmp[key][stat_t].strip('(!)'))/10
+                        except ValueError:
+                            continue
                         tmp[key][stat_t] = '%.1f' %tmp[key][stat_t]
                         if conf['sensor_thresholds'][3] != 'none':
                             if float(tmp[key][stat_t].strip('(!)')) >= conf['sensor_thresholds'][3]:
