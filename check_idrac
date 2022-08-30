@@ -389,7 +389,7 @@ class PARSER:
         available_cmd = {'3': cmd_v3, '2c': cmd_v2}
         snmp_cli = available_cmd[conf['snmp_version']]
         scProc = run(snmp_cli.split(' '), capture_output=True)  # query snmp data
-        output=scProc.stdout.decode('utf-8') + '\n' + scProc.stderr.decode('utf-8')
+        output=scProc.stdout.decode('utf-8', 'ignore') + '\n' + scProc.stderr.decode('utf-8', 'ignore')
         if scProc.returncode != 0:
             if 'Unknown Object Identifier' in output:
                 print('your MIB may be out of date!')
