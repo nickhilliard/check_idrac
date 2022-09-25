@@ -18,7 +18,7 @@ it.
 
 To install on Debian / Ubuntu:
 ```
-# apt install snmp-mibs-downloader
+# apt install snmp snmp-mibs-downloader
 ```
 
 ## Supported hardware type:
