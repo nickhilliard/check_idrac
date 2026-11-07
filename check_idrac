@@ -362,7 +362,7 @@ def config_verify():  # check if configurations are properly set
     conf['state_ok'] = '|'.join(conf['state_ok'])
     conf['state_warn'] = '|'.join(conf['state_warn'])
     conf['state_crit'] = '|'.join(conf['state_crit'])
-                        
+
 
 class PARSER:
     def __init__(self):
@@ -636,10 +636,10 @@ class PARSER:
             # If your idrac installed with more hw, write your own translator here
             #--TRANSLATOR--#
             if self.hardware[2] == 'PDisk' or self.hardware[2] == 'VDisk':
-                oids = self.hardware[3].replace('|', ' ').replace('\.', '.%d' % self.order)
+                oids = self.hardware[3].replace('|', ' ').replace(r'\.', '.%d' % self.order)
                 snmp_data = self.get_snmp(oids)
             else:
-                oids = self.hardware[3].replace('|', ' ').replace('\.', '.1.%d' % self.order)
+                oids = self.hardware[3].replace('|', ' ').replace(r'\.', '.1.%d' % self.order)
                 if self.hardware[2] == 'PS':
                     oids = ' '.join(oids.split()[:-1])
                     snmp_data = self.get_snmp(oids)
@@ -820,7 +820,7 @@ class PARSER:
                 output.append(tmp % (self.hardware[2], hw[0], hw[4].replace('.', ' ').replace('"', ''),
                                      hw_5, hw[6].split()[-1], hw[1], hw[2], hw[3].replace('deviceTypeIs', ''),
                                      hw[7].replace('"', ''), hw[8].replace('"', ''),))
-            
+
             # Check number of installed memory modules
             if conf['mem_modules'] and int(conf['mem_modules']) != len(hw_dict):
                 detect_diff = int(conf['mem_modules']) - len(hw_dict)
